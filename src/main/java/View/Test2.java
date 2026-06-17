@@ -1,4 +1,4 @@
-package Frontend;
+package View;
 
 public class Test2 {
 }

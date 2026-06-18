@@ -1,7 +1,9 @@
 package Model.Strategy;
 
+import Model.entidades.Tutor;
+
 import java.util.List;
 
 public interface strategyBusqueda {
-    List<tutor> filtrar(List<tutor> tutores, criterioDeBusqueda criterios);
+    List<Tutor> filtrar(List<Tutor> tutores, criterioDeBusqueda criterios);
 }

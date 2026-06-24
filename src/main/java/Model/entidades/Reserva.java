@@ -35,12 +35,12 @@ public class Reserva {
 
     }
 
-    public estadoReserva cancelar(){
-        return estado = Model.enums.estadoReserva.CANCELADA;
+    public void cancelar(){
+        this.estado = Model.enums.estadoReserva.CANCELADA;
     }
 
-    public estadoReserva completar(){
-        return estado = Model.enums.estadoReserva.COMPLETADA;
+    public void completar(){
+        this.estado = Model.enums.estadoReserva.COMPLETADA;
     }
 
     public boolean estaActiva(){
@@ -48,7 +48,7 @@ public class Reserva {
     }
 
     public boolean conflictaCon(Reserva otra) {
-        return this.bloqueHorario.seSolapaCon(otra.getBloqueHorario());
+        return bloqueHorario.seSolapaCon(otra.getBloqueHorario());
     }
 
     public String getId() {
@@ -69,6 +69,10 @@ public class Reserva {
 
     public BloqueHorario getBloqueHorario() {
         return bloqueHorario;
+    }
+
+    public void setBloqueHorario(BloqueHorario bloqueHorario) {
+        this.bloqueHorario = bloqueHorario;
     }
 
     public LocalDateTime getFechaCreacion() {

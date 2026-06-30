@@ -28,7 +28,7 @@ public class TutorService implements observer {
         }
         Tutor nuevoTutor = new Tutor(nombre, apellido, email, telefono);
         tutores.add(nuevoTutor);
-        notificarObservadores(eventoModelo.TUTOR_AGREGADO, nuevoTutor);
+        notifyObservador(eventoModelo.TUTOR_AGREGADO, nuevoTutor);
     }
 
     public void modificarTutor(String id, String nombre, String apellido, String email, String telefono) {
@@ -39,13 +39,13 @@ public class TutorService implements observer {
         }
 
 
-        notificarObservadores(eventoModelo.TUTOR_MODIFICADO, tutor);
+        notifyObservador(eventoModelo.TUTOR_MODIFICADO, tutor);
     }
 
     public void eliminarTutor(String id) {
         Tutor tutor = buscarPorId(id);
         tutor.setActivo(false); // Borrado lógico
-        notificarObservadores(eventoModelo.TUTOR_ELIMINADO, tutor);
+        notifyObservador(eventoModelo.TUTOR_ELIMINADO, tutor);
     }
 
     public Tutor buscarPorId(String id) {
@@ -67,13 +67,13 @@ public class TutorService implements observer {
     public void agregarMateriaATutor(String tutorId, Materia materia) {
         Tutor tutor = buscarPorId(tutorId);
         tutor.agregarMateria(materia);
-        notificarObservadores(eventoModelo.TUTOR_MODIFICADO, tutor);
+        notifyObservador(eventoModelo.TUTOR_MODIFICADO, tutor);
     }
 
     public void agregarBloqueATutor(String tutorId, BloqueHorario bloque) {
         Tutor tutor = buscarPorId(tutorId);
         tutor.agregarBloqueDisponibilidad(bloque);
-        notificarObservadores(eventoModelo.TUTOR_MODIFICADO, tutor);
+        notifyObservador(eventoModelo.TUTOR_MODIFICADO, tutor);
     }
 
     // --- Implementación del patrón Observer ---
@@ -91,7 +91,7 @@ public class TutorService implements observer {
     }
 
     @Override
-    public void notificarObservadores(eventoModelo evento, Object datos) {
+    public void notifyObservador(eventoModelo evento, Object datos) {
         for (modelObserver obs : observadores) {
             obs.onModeloActualizado(evento, datos);
         }

@@ -28,7 +28,7 @@ public class BusquedaPorDisponibilidadDeCupo implements strategyBusqueda {
                 .filter(tutor -> {
                     if (!tutor.imparteMateria(criterios.getMateria())) return false;
 
-                    int estudiantesActuales = reservaService.contarEstudiantesEnBloque(
+                    int estudiantesActuales = reservaService.contarEstudianteEnBloque(
                             tutor.getId(), criterios.getMateria(), bloque);
 
                     int cupoMaximo = tutor.getMaterias().stream()

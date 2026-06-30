@@ -16,7 +16,7 @@ public class EstudianteService implements observer {
     private List<modelObserver> observadores;
 
 
-    EstudianteService(){
+    public EstudianteService(){
         estudiantes = new ArrayList<>();
         observadores = new ArrayList<>();
     }

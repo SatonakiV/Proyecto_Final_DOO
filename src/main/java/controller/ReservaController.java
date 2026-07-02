@@ -4,6 +4,8 @@ import Model.entidades.BloqueHorario;
 import Model.entidades.Estudiante;
 import Model.entidades.Materia;
 import Model.entidades.Tutor;
+import Model.entidades.Reserva;
+import java.util.List;
 import Model.services.ReservaService;
 import Model.Exceptions.cupoMaximoException;
 import Model.Exceptions.conflictoHorarioException;
@@ -44,5 +46,9 @@ public class ReservaController {
             System.out.println("Error al anular: " + e.getMessage());
             return "Error al anular la reserva.";
         }
+    }
+
+    public List<Reserva> obtenerTodas() {
+        return srvReserva.obtenerTodas();
     }
 }

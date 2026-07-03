@@ -35,4 +35,8 @@ public class CalendarioController {
     public List<BloqueHorario> obtenerBloquesOcupados(String tutorId, diaSemana dia) {
         return calendarioService.obtenerBloquesOcupados(tutorId, dia);
     }
+
+    public List<Reserva> obtenerTodasLasReservas() {
+        return calendarioService.obtenerTodasLasReservas();
+    }
 }

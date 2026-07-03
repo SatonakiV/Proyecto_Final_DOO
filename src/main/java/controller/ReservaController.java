@@ -11,13 +11,17 @@ import Model.Exceptions.cupoMaximoException;
 import Model.Exceptions.conflictoHorarioException;
 import Model.Exceptions.datosInvalidosException;
 import Model.Exceptions.tutorNoDisponibleException;
+import Model.services.BuscadorDisponibilidad;
+import Model.Strategy.criterioDeBusqueda;
 
 public class ReservaController {
 
     private ReservaService srvReserva;
+    private BuscadorDisponibilidad buscador;
 
-    public ReservaController(ReservaService srvReserva) {
+    public ReservaController(ReservaService srvReserva, BuscadorDisponibilidad buscador) {
         this.srvReserva = srvReserva;
+        this.buscador = buscador;
     }
 
     public String agendarClase(Estudiante estudiante, Tutor tutor, Materia materia, BloqueHorario bloque, String notas) {
@@ -50,5 +54,12 @@ public class ReservaController {
 
     public List<Reserva> obtenerTodas() {
         return srvReserva.obtenerTodas();
+    }
+
+    public List<Tutor> buscarTutoresDisponibles(String materia, Model.enums.diaSemana dia, java.time.LocalTime inicio, java.time.LocalTime fin) {
+        criterioDeBusqueda criterios = new criterioDeBusqueda(materia, dia, inicio, fin, null);
+        buscador.limpiarStrategy();
+        buscador.agregarStrategy(new Model.Strategy.BusquedaPorDisponibilidadDeCupo(srvReserva));
+        return buscador.buscarTutores(criterios);
     }
 }

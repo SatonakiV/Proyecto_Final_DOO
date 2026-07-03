@@ -8,8 +8,7 @@ import Model.observer.modelObserver;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.util.List;
 
 public class PanelCalendario extends JPanel implements modelObserver {
 
@@ -17,7 +16,6 @@ public class PanelCalendario extends JPanel implements modelObserver {
     private CalendarioCanvas canvas;
     private JComboBox<String> cbFiltro;
     private JButton btnActualizar;
-    private Map<diaSemana, List<Reserva>> datosActuales;
 
     public PanelCalendario(controller.CalendarioController controller) {
         this.controller = controller;
@@ -52,18 +50,7 @@ public class PanelCalendario extends JPanel implements modelObserver {
     }
 
     private void cargarDatos() {
-        List<Reserva> todasLasReservas = new ArrayList<>();
-
-        Map<diaSemana, List<Reserva>> mapaSemanal = controller.obtenerCalendarioGeneral();
-
-        if (mapaSemanal != null) {
-            for (List<Reserva> reservasPorDia : mapaSemanal.values()) {
-                if (reservasPorDia != null) {
-                    todasLasReservas.addAll(reservasPorDia);
-                }
-            }
-        }
-
+        List<Reserva> todasLasReservas = controller.obtenerTodasLasReservas();
         canvas.setReservas(todasLasReservas);
         canvas.repaint();
     }

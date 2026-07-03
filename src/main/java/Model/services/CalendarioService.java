@@ -62,6 +62,14 @@ public class CalendarioService {
         return mapa;
     }
 
+    public List<Reserva> obtenerTodasLasReservas() {
+        List<Reserva> activas = new ArrayList<>();
+        for (Reserva r : reservaService.obtenerTodas()) {
+            if (r.estaActiva()) activas.add(r);
+        }
+        return activas;
+    }
+
     public List<BloqueHorario> obtenerBloquesOcupados(String tutorId, diaSemana dia) {
         List<BloqueHorario> bloquesOcupados = new ArrayList<>();
         List<Reserva> reservasTutor = reservaService.obtenerReservasActivasPorTutor(tutorId);

@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class PanelCalendario extends JPanel implements modelObserver {
 
@@ -51,7 +52,18 @@ public class PanelCalendario extends JPanel implements modelObserver {
     }
 
     private void cargarDatos() {
-        List<Reserva> todasLasReservas = controller.obtenerTodasLasReservas();
+        List<Reserva> todasLasReservas = new ArrayList<>();
+
+        Map<diaSemana, List<Reserva>> mapaSemanal = controller.obtenerCalendarioGeneral();
+
+        if (mapaSemanal != null) {
+            for (List<Reserva> reservasPorDia : mapaSemanal.values()) {
+                if (reservasPorDia != null) {
+                    todasLasReservas.addAll(reservasPorDia);
+                }
+            }
+        }
+
         canvas.setReservas(todasLasReservas);
         canvas.repaint();
     }

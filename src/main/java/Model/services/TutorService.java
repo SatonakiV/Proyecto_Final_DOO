@@ -12,6 +12,8 @@ import Model.observer.observer; // Interfaz Observable según tu captura
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.HashSet;
 
 public class TutorService implements observer {
     private List<Tutor> tutores;
@@ -62,6 +64,16 @@ public class TutorService implements observer {
         return tutores.stream()
                 .filter(Tutor::isActivo)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public List<String> obtenerMateriasUnicas() {
+        Set<String> materias = new HashSet<>();
+        for (Tutor t : obtenerTodos()) {
+            for (Materia m : t.getMaterias()) {
+                materias.add(m.getNombre());
+            }
+        }
+        return new ArrayList<>(materias);
     }
 
     public void agregarMateriaATutor(String tutorId, Materia materia) {

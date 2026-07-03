@@ -18,7 +18,7 @@ public class DialogoReserva extends JDialog {
     private TutorController tutorController;
 
     private JComboBox<Estudiante> cbEstudiantes;
-    private JTextField txtMateria;
+    private JComboBox<String> cbMateria;
     private JComboBox<diaSemana> cbDias;
     private JComboBox<String> cbHoraInicio;
     private JComboBox<String> cbHoraFin;
@@ -52,7 +52,7 @@ public class DialogoReserva extends JDialog {
         panelForm.setBorder(BorderFactory.createTitledBorder("Criterios de Búsqueda"));
 
         cbEstudiantes = new JComboBox<>();
-        txtMateria = new JTextField();
+        cbMateria = new JComboBox<>();
         cbDias = new JComboBox<>(diaSemana.values());
         
         String[] horas = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"};
@@ -61,7 +61,7 @@ public class DialogoReserva extends JDialog {
         txtNotas = new JTextArea(2, 20);
 
         panelForm.add(new JLabel("Seleccionar Estudiante:")); panelForm.add(cbEstudiantes);
-        panelForm.add(new JLabel("Materia a recibir:")); panelForm.add(txtMateria);
+        panelForm.add(new JLabel("Materia a recibir:")); panelForm.add(cbMateria);
         panelForm.add(new JLabel("Día de la semana:")); panelForm.add(cbDias);
         panelForm.add(new JLabel("Hora Inicio:")); panelForm.add(cbHoraInicio);
         panelForm.add(new JLabel("Hora Fin:")); panelForm.add(cbHoraFin);
@@ -93,18 +93,23 @@ public class DialogoReserva extends JDialog {
         for (Estudiante e : estudiantes) {
             cbEstudiantes.addItem(e);
         }
+
+        List<String> materias = tutorController.obtenerMateriasUnicas();
+        for (String m : materias) {
+            cbMateria.addItem(m);
+        }
     }
 
     private void configurarAccionesBotones() {
         btnBuscarTutores.addActionListener(e -> {
-            String materia = txtMateria.getText().trim();
+            String materia = (String) cbMateria.getSelectedItem();
             diaSemana dia = (diaSemana) cbDias.getSelectedItem();
             
             LocalTime inicio = LocalTime.parse((String) cbHoraInicio.getSelectedItem());
             LocalTime fin = LocalTime.parse((String) cbHoraFin.getSelectedItem());
 
-            if (materia.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Debe escribir una materia");
+            if (materia == null || materia.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una materia");
                 return;
             }
 
@@ -134,7 +139,7 @@ public class DialogoReserva extends JDialog {
         btnAgendar.addActionListener(e -> {
             Estudiante estudiante = (Estudiante) cbEstudiantes.getSelectedItem();
             Tutor tutor = (Tutor) cbTutoresDisponibles.getSelectedItem();
-            String nombreMateria = txtMateria.getText().trim();
+            String nombreMateria = (String) cbMateria.getSelectedItem();
             diaSemana dia = (diaSemana) cbDias.getSelectedItem();
             LocalTime inicio = LocalTime.parse((String) cbHoraInicio.getSelectedItem());
             LocalTime fin = LocalTime.parse((String) cbHoraFin.getSelectedItem());
@@ -145,10 +150,22 @@ public class DialogoReserva extends JDialog {
                 return;
             }
 
-            Materia materia = new Materia(nombreMateria, 0, 0); 
+            Materia materiaSeleccionada = null;
+            for (Materia m : tutor.getMaterias()) {
+                if (m.getNombre().equalsIgnoreCase(nombreMateria)) {
+                    materiaSeleccionada = m;
+                    break;
+                }
+            }
+
+            if (materiaSeleccionada == null) {
+                JOptionPane.showMessageDialog(this, "Error: El tutor no tiene registrada la materia seleccionada.");
+                return;
+            }
+
             BloqueHorario bloque = new BloqueHorario(dia, inicio, fin);
 
-            String resultado = reservaController.agendarClase(estudiante, tutor, materia, bloque, notas);
+            String resultado = reservaController.agendarClase(estudiante, tutor, materiaSeleccionada, bloque, notas);
             
             JOptionPane.showMessageDialog(this, resultado);
             

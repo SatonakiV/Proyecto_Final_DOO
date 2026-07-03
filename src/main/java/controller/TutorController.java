@@ -75,6 +75,10 @@ public class TutorController {
         return tutorService.obtenerTodos();
     }
 
+    public List<String> obtenerMateriasUnicas() {
+        return tutorService.obtenerMateriasUnicas();
+    }
+
     public Tutor buscarPorId(String id) {
         try {
             return tutorService.buscarPorId(id);

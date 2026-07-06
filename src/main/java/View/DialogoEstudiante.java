@@ -79,11 +79,11 @@ public class DialogoEstudiante extends JDialog {
                 resultado = controller.modificar(idEditar, nombre, apellido, email, telefono);
 
             } else {
-                controller.registrar(nombre, apellido, email, telefono);
+                resultado = controller.registrar(nombre, apellido, email, telefono);
             }
 
             JOptionPane.showMessageDialog(this, resultado);
-            if(resultado.equals("Éxito")) dispose();
+            if(resultado.contains("éxito")) dispose();
         });
 
 

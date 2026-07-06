@@ -27,7 +27,7 @@ public class ReservaController {
     public String agendarClase(Estudiante estudiante, Tutor tutor, Materia materia, BloqueHorario bloque, String notas) {
         try {
             srvReserva.crearReserva(tutor, estudiante, materia, bloque, notas);
-            return "Guardado";
+            return "Reserva guardada exitosamente.";
         } catch (cupoMaximoException e) {
             return "Sin cupos disponibles.";
         } catch (conflictoHorarioException e) {

@@ -38,6 +38,10 @@ public class TutorService implements observer {
             throw new datosInvalidosException("El nombre y el apellido no pueden estar vacíos.");
         }
 
+        tutor.setNombre(nombre);
+        tutor.setApellido(apellido);
+        tutor.setEmail(email);
+        tutor.setTelefono(telefono);
 
         notifyObservador(eventoModelo.TUTOR_MODIFICADO, tutor);
     }

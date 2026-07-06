@@ -131,7 +131,7 @@ public class ReservaService implements observer {
 
         int inscritos = contarEstudianteEnBloque(tutor.getId(), materia.getNombre(), bloque);
 
-        if(inscritos > materia.getCupoMaximoEstudiantes()){
+        if(inscritos >= materia.getCupoMaximoEstudiantes()){
             throw new cupoMaximoException("El tutor ya alcanzo el límite de estudiantes para la materia en este horario");
         }
 

@@ -93,7 +93,7 @@ public class Estudiante {
 
     @Override
     public String toString(){
-        return "Estudiante: " + nombre + apellido;
+        return "Estudiante: " + nombre + " " + apellido;
     }
 }
 

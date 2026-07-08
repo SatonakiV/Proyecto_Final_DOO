@@ -5,4 +5,4 @@ Integrantes: Gerhec Ain Parra Gavilan, Diego Felipe Fuentes Conejeros(Satonakiv)
 Grupo 16
 
 
-![UML_PROYECTO.png](UML_PROYECTO.png)
+![UML_PROYECTO.svg](UML_PROYECTO.svg)

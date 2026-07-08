@@ -44,6 +44,9 @@ public class PanelTutores extends JPanel implements modelObserver {
         btnAgregar = new JButton("Agregar Tutor");
         btnEditar = new JButton("Editar Seleccionado");
         btnEliminar = new JButton("Eliminar Seleccionado");
+        botonesUI.pintarBoton(btnAgregar);
+        botonesUI.pintarBoton(btnEditar);
+        botonesUI.pintarBoton(btnEliminar);
 
         btnAgregar.addActionListener(e -> {
             DialogoTutor dialogo = new DialogoTutor(null, this.controller);

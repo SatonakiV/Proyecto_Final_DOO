@@ -96,9 +96,11 @@ public class DialogoReserva extends JDialog {
         btnBuscarTutores = new JButton("1. Buscar Tutores Disponibles");
         cbTutoresDisponibles = new JComboBox<>();
         cbTutoresDisponibles.setEnabled(false);
-        
+
         btnAgendar = new JButton("2. Agendar Clase con este Tutor");
         btnAgendar.setEnabled(false);
+        botonesUI.pintarBoton(btnBuscarTutores);
+        botonesUI.pintarBoton(btnAgendar);
 
         panelResultados.add(btnBuscarTutores);
         panelResultados.add(cbTutoresDisponibles);

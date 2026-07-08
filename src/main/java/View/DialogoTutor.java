@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 /**
+ *
  * Diálogo más completo de la aplicación: además de nombre, apellido, email y teléfono,
  * permite agregar materias y bloques de horario en dos tablas internas que se llenan
  * en memoria y recién se guardan contra el Modelo al presionar "Guardar". El mismo
@@ -151,6 +152,8 @@ public class DialogoTutor extends JDialog {
         txtCupo = new JTextField();
         btnAgregarMateria = new JButton("Agregar");
         btnQuitarMateria = new JButton("Quitar");
+        botonesUI.pintarBoton(btnAgregarMateria);
+        botonesUI.pintarBoton(btnQuitarMateria);
 
         panelEntrada.add(new JLabel("Nombre:")); panelEntrada.add(txtNombreMateria);
         panelEntrada.add(new JLabel("Tarifa:")); panelEntrada.add(txtTarifa);
@@ -205,6 +208,8 @@ public class DialogoTutor extends JDialog {
         cbHoraFin.setSelectedIndex(1);
         btnAgregarHorario = new JButton("Agregar");
         btnQuitarHorario = new JButton("Quitar");
+        botonesUI.pintarBoton(btnAgregarHorario);
+        botonesUI.pintarBoton(btnQuitarHorario);
 
         panelEntrada.add(new JLabel("Día:")); panelEntrada.add(cbDia);
         panelEntrada.add(new JLabel("Inicio:")); panelEntrada.add(cbHoraInicio);
@@ -238,6 +243,8 @@ public class DialogoTutor extends JDialog {
         JPanel panel = new JPanel();
         btnGuardar = new JButton("Guardar");
         btnCancelar = new JButton("Cancelar");
+        botonesUI.pintarBoton(btnGuardar);
+        botonesUI.pintarBoton(btnCancelar);
 
         btnCancelar.addActionListener(e -> dispose());
 

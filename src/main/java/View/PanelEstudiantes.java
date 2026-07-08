@@ -49,6 +49,9 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
         btnAgregar = new JButton("Agregar Estudiante");
         btnEditar = new JButton("Editar Seleccionado");
         btnEliminar = new JButton("Eliminar Seleccionado");
+        botonesUI.pintarBoton(btnAgregar);
+        botonesUI.pintarBoton(btnEditar);
+        botonesUI.pintarBoton(btnEliminar);
 
         btnAgregar.addActionListener(e -> {
 

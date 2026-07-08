@@ -55,6 +55,8 @@ public class PanelReservas extends JPanel implements modelObserver {
 
         btnNuevaReserva = new JButton("Nueva Reserva (Buscar Tutor)");
         btnAnularReserva = new JButton("Anular Reserva Seleccionada");
+        botonesUI.pintarBoton(btnNuevaReserva);
+        botonesUI.pintarBoton(btnAnularReserva);
 
         btnAnularReserva.addActionListener(e -> {
             int fila = tablaReservas.getSelectedRow();
@@ -86,7 +88,7 @@ public class PanelReservas extends JPanel implements modelObserver {
      * Crea la tabla de reservas, sin celdas editables directamente.
      */
     private void inicializarTabla() {
-        String[] columnas = {"ID", "Estudiante", "Tutor", "Materia", "Día", "Horario"};
+        String[] columnas = {"ID", "Estudiante", "Tutor", "Materia", "Día", "Horario", "Tarifa/hr", "Costo Total"};
 
         modeloTabla = new DefaultTableModel(columnas, 0){
             @Override
@@ -107,13 +109,19 @@ public class PanelReservas extends JPanel implements modelObserver {
 
         for(Reserva r : lista){
             if (r.estaActiva()) {
+                double tarifaPorHora = r.getMateria().getTarifaPorHora();
+                double horas = r.getBloqueHorario().getDuracionMinutos() / 60.0;
+                double costoTotal = tarifaPorHora * horas;
+
                 Object[] fila = {
                     r.getId(),
                     r.getEstudiante().getNombreCompleto(),
                     r.getTutor().getNombreCompleto(),
                     r.getMateria().getNombre(),
                     r.getBloqueHorario().getDia().toString(),
-                    r.getBloqueHorario().getHoraInicio() + " a " + r.getBloqueHorario().getHoraFin()
+                    r.getBloqueHorario().getHoraInicio() + " a " + r.getBloqueHorario().getHoraFin(),
+                    String.format("$%.2f", tarifaPorHora),
+                    String.format("$%.2f", costoTotal)
                 };
                 modeloTabla.addRow(fila);
             }

@@ -80,6 +80,8 @@ public class DialogoEstudiante extends JDialog {
 
         btnAceptar = new JButton("Aceptar");
         btnCancelar = new JButton("Cancelar");
+        botonesUI.pintarBoton(btnAceptar);
+        botonesUI.pintarBoton(btnCancelar);
         add(btnAceptar); add(btnCancelar);
 
         btnCancelar.addActionListener(e -> dispose());

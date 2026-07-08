@@ -43,6 +43,7 @@ public class PanelCalendario extends JPanel implements modelObserver {
         cbFiltro = new JComboBox<>(new String[]{"Vista General"});
         cbFiltro.setPreferredSize(new Dimension(200, 25));
         btnActualizar = new JButton("Ver Calendario");
+        botonesUI.pintarBoton(btnActualizar);
 
         btnActualizar.addActionListener(e -> cargarDatos());
 

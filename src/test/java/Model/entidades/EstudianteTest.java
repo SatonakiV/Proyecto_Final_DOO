@@ -34,6 +34,7 @@ class EstudianteTest {
     }
 
     @Test
+
     void constructorLanzaExcepcionSiNombreEsNull() {
         assertThrows(datosInvalidosException.class,
                 () -> new Estudiante(null, "Perez", "ana@mail.com", "1"));

@@ -1,6 +1,7 @@
 package Model.services;
 
-import Model.Exceptions.conflictoHorarioException;
+import
+        Model.Exceptions.conflictoHorarioException;
 import Model.Exceptions.cupoMaximoException;
 import Model.Exceptions.individuoNoEncontradoException;
 import Model.Exceptions.tutorNoDisponibleException;
@@ -30,9 +31,6 @@ public class ReservaService implements observer {
         this.observadores = new ArrayList<>();
 
     }
-
-
-
 
 
     /**
@@ -136,7 +134,7 @@ public class ReservaService implements observer {
         for (Reserva r : reservas) {
             if(r.estaActiva() &&
             r.getTutor().getId().equals(tutorId) &&
-            r.getMateria().getNombre().equals(nombreMateria) &&
+            r.getMateria().getNombre().equalsIgnoreCase(nombreMateria) &&
             r.getBloqueHorario().seSolapaCon(bloque)){
                 contador++;
             }
@@ -209,6 +207,27 @@ public class ReservaService implements observer {
     public void modificarReserva(String id, BloqueHorario nuevoBloque){
 
         Reserva r = buscarPorId(id);
+
+        // 1. El tutor debe trabajar en el nuevo horario
+        if(!r.getTutor().tieneDisponibilidadEn(nuevoBloque.getDia(), nuevoBloque.getHoraInicio(), nuevoBloque.getHoraFin())){
+            throw new tutorNoDisponibleException("El tutor no trabaja en ese horario");
+        }
+
+        // 2. El estudiante no debe tener otra clase que choque (ignorando esta misma reserva)
+        for(Reserva otra : obtenerReservasActivasPorEstudiante(r.getEstudiante().getId())){
+            if(!otra.getId().equals(id) && otra.getBloqueHorario().seSolapaCon(nuevoBloque)){
+                throw new conflictoHorarioException("El estudiante ya tiene una clase que choca con este horario");
+            }
+        }
+
+        // 3. No se debe superar el cupo de la materia (descontando esta reserva si ya estaba en el bloque)
+        int inscritos = contarEstudianteEnBloque(r.getTutor().getId(), r.getMateria().getNombre(), nuevoBloque);
+        if(r.getBloqueHorario().seSolapaCon(nuevoBloque)){
+            inscritos--; // esta reserva ya estaba contada en ese bloque
+        }
+        if(inscritos >= r.getMateria().getCupoMaximoEstudiantes()){
+            throw new cupoMaximoException("El tutor ya alcanzo el límite de estudiantes para la materia en este horario");
+        }
 
         r.setBloqueHorario(nuevoBloque);
 

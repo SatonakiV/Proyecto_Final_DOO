@@ -11,6 +11,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Panel con la tabla de tutores y los botones para agregar, editar y eliminar. Se
+ * refresca solo cuando el Modelo notifica un cambio relevante sobre tutores.
+ */
 public class PanelTutores extends JPanel implements modelObserver {
 
     private controller.TutorController controller;
@@ -20,6 +24,9 @@ public class PanelTutores extends JPanel implements modelObserver {
     private JButton btnEditar;
     private JButton btnEliminar;
 
+    /**
+     * @param controller controlador al que se delegan las operaciones sobre tutores
+     */
     public PanelTutores(controller.TutorController controller) {
         this.controller = controller;
         setLayout(new BorderLayout());
@@ -28,6 +35,9 @@ public class PanelTutores extends JPanel implements modelObserver {
         cargarDatos();
     }
 
+    /**
+     * Crea los botones de agregar, editar y eliminar tutor, y conecta sus acciones.
+     */
     private void inicializarBotones() {
         JPanel panelNorte = new JPanel();
 
@@ -73,6 +83,9 @@ public class PanelTutores extends JPanel implements modelObserver {
         add(panelNorte, BorderLayout.NORTH);
     }
 
+    /**
+     * Crea la tabla de tutores, sin celdas editables directamente.
+     */
     private void inicializarTabla() {
         String[] columnas = {"ID", "Nombre", "Apellido", "Email", "Teléfono", "Materias", "Bloques"};
 
@@ -87,6 +100,9 @@ public class PanelTutores extends JPanel implements modelObserver {
         add(new JScrollPane(tablaTutores), BorderLayout.CENTER);
     }
 
+    /**
+     * Vacía y vuelve a llenar la tabla con los tutores activos actuales.
+     */
     private void cargarDatos() {
         modeloTabla.setRowCount(0);
         List<Tutor> lista = controller.obtenerTodos();
@@ -106,6 +122,10 @@ public class PanelTutores extends JPanel implements modelObserver {
         }
     }
 
+    /**
+     * @param evento tipo de evento ocurrido
+     * @param datos objeto afectado por el evento
+     */
     @Override
     public void onModeloActualizado(eventoModelo evento, Object datos) {
         if (evento == eventoModelo.TUTOR_AGREGADO ||

@@ -2,7 +2,15 @@ import View.MainFrame;
 
 import javax.swing.*;
 
+/**
+ * Punto de entrada de la aplicación.
+ */
 public class Main {
+    /**
+     * Crea y muestra la ventana principal en el hilo de eventos de Swing.
+     *
+     * @param args argumentos de línea de comandos, no utilizados
+     */
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(new Runnable() {

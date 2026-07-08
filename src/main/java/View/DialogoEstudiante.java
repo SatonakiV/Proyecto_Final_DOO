@@ -6,6 +6,10 @@ import controller.EstudianteController;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Diálogo con un formulario de cuatro campos para registrar un estudiante nuevo o
+ * editar uno existente, según qué constructor se use.
+ */
 public class DialogoEstudiante extends JDialog {
 
     private JTextField txtNombre;
@@ -20,6 +24,12 @@ public class DialogoEstudiante extends JDialog {
 
     private EstudianteController controller;
 
+    /**
+     * Crea el diálogo en modo de registro de un estudiante nuevo.
+     *
+     * @param frame ventana padre del diálogo
+     * @param controller controlador al que se delega el registro del estudiante
+     */
     public DialogoEstudiante(JFrame frame, EstudianteController controller) {
         super(frame, "Nuevo Estudiante", true);
         this.controller = controller;
@@ -27,6 +37,13 @@ public class DialogoEstudiante extends JDialog {
     }
 
 
+    /**
+     * Crea el diálogo en modo de edición, precargando los campos con los datos del estudiante dado.
+     *
+     * @param frame ventana padre del diálogo
+     * @param controller controlador al que se delega la modificación del estudiante
+     * @param estudianteAEditar estudiante cuyos datos se van a editar
+     */
     public DialogoEstudiante(JFrame frame, EstudianteController controller, Estudiante estudianteAEditar) {
         super(frame, "Editar Estudiante", true);
         this.controller = controller;
@@ -44,6 +61,9 @@ public class DialogoEstudiante extends JDialog {
 
 
 
+    /**
+     * Crea los campos del formulario y conecta las acciones de aceptar y cancelar.
+     */
     private void inicializarComponentes() {
 
         setSize(300, 250);

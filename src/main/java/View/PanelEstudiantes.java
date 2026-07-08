@@ -10,6 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Panel con la tabla de estudiantes y los botones para agregar, editar y eliminar. Se
+ * refresca solo cuando el Modelo notifica un cambio relevante sobre estudiantes.
+ */
 public class PanelEstudiantes extends JPanel implements modelObserver {
 
     private controller.EstudianteController controller;
@@ -19,6 +23,9 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEditar;
 
+    /**
+     * @param controller controlador al que se delegan las operaciones sobre estudiantes
+     */
     public PanelEstudiantes(controller.EstudianteController controller) {
         this.controller = controller;
 
@@ -32,6 +39,9 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
 
     }
 
+    /**
+     * Crea los botones de agregar, editar y eliminar estudiante, y conecta sus acciones.
+     */
     private void inicializarBotones() {
 
         JPanel panelNorte = new javax.swing.JPanel();
@@ -92,6 +102,9 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
 
 
 
+    /**
+     * Crea la tabla de estudiantes, sin celdas editables directamente.
+     */
     private void inicializarTabla() {
 
         String[] columnas = {"ID", "Nombre", "Apellido", "Email", "Teléfono"};
@@ -111,6 +124,9 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
 
     }
 
+    /**
+     * Vacía y vuelve a llenar la tabla con los estudiantes activos actuales.
+     */
     private void cargarDatos(){
 
         modeloTabla.setRowCount(0);
@@ -127,6 +143,10 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
     }
 
 
+    /**
+     * @param evento tipo de evento ocurrido
+     * @param datos objeto afectado por el evento
+     */
     @Override
     public void onModeloActualizado(eventoModelo evento, Object datos) {
 

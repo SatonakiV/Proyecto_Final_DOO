@@ -10,6 +10,12 @@ import controller.TutorController;
 import javax.swing.*;
 import java.time.LocalTime;
 
+/**
+ * Ventana principal de la aplicación. Arma en orden los servicios, los controladores,
+ * los paneles y las conexiones de Observer entre ellos, y carga datos de ejemplo para
+ * no arrancar con las tablas vacías. Es la única clase que conoce y crea todas las
+ * piezas del sistema.
+ */
 public class MainFrame extends JFrame {
 
    private JTabbedPane tabbedPane;
@@ -31,6 +37,10 @@ public class MainFrame extends JFrame {
    private BuscadorDisponibilidad buscadorDisponibilidad;
 
 
+   /**
+    * Crea la ventana principal, inicializando controladores, datos de ejemplo, vistas
+    * y las conexiones de Observer entre el Modelo y la Vista.
+    */
    public MainFrame() {
        setTitle("Sistema de Gestión de Tutorías");
        setSize(1200, 800);
@@ -51,6 +61,9 @@ public class MainFrame extends JFrame {
 
 
 
+    /**
+     * Crea los servicios del Modelo y los controladores que dependen de ellos.
+     */
     private void inicializarControladores() {
        this.tutorService = new TutorService();
        this.reservaService = new ReservaService();
@@ -67,6 +80,9 @@ public class MainFrame extends JFrame {
 
    }
 
+    /**
+     * Crea el panel con pestañas y los paneles de cada sección de la aplicación.
+     */
     private void inicializarVistas() {
 
        this.tabbedPane = new JTabbedPane();
@@ -84,6 +100,10 @@ public class MainFrame extends JFrame {
        tabbedPane.addTab("Calendario", panelCalendario);
     }
 
+    /**
+     * Registra cada panel como observador de su servicio correspondiente, para que se
+     * refresquen solos cuando el Modelo notifique un cambio.
+     */
     private void conectarVistasAlModelo() {
 
         tutorService.agregarObservador(panelTutores);
@@ -94,6 +114,10 @@ public class MainFrame extends JFrame {
        reservaService.agregarObservador(panelCalendario);
     }
 
+    /**
+     * Registra tutores y estudiantes de ejemplo, con sus materias y bloques de horario,
+     * para que la aplicación no arranque con las tablas vacías.
+     */
     private void cargarDatosDePrueba() {
         tutorController.agregarTutor("Carlos", "Mendez", "cmendez@udec.cl", "555-1001");
         tutorController.agregarTutor("Laura", "Rios", "lrios@udec.cl", "555-1002");

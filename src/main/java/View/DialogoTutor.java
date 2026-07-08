@@ -11,6 +11,12 @@ import java.awt.*;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Diálogo más completo de la aplicación: además de nombre, apellido, email y teléfono,
+ * permite agregar materias y bloques de horario en dos tablas internas que se llenan
+ * en memoria y recién se guardan contra el Modelo al presionar "Guardar". El mismo
+ * diálogo sirve para crear o editar, según qué constructor se use.
+ */
 public class DialogoTutor extends JDialog {
 
     private controller.TutorController controller;
@@ -46,12 +52,25 @@ public class DialogoTutor extends JDialog {
             "13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"
     };
 
+    /**
+     * Crea el diálogo en modo de registro de un tutor nuevo.
+     *
+     * @param parent ventana padre del diálogo
+     * @param controller controlador al que se delegan las operaciones sobre el tutor
+     */
     public DialogoTutor(JFrame parent, controller.TutorController controller) {
         super(parent, "Nuevo Tutor", true);
         this.controller = controller;
         inicializarComponentes();
     }
 
+    /**
+     * Crea el diálogo en modo de edición, precargando los campos, materias y bloques de horario del tutor dado.
+     *
+     * @param parent ventana padre del diálogo
+     * @param controller controlador al que se delegan las operaciones sobre el tutor
+     * @param tutor tutor cuyos datos se van a editar
+     */
     public DialogoTutor(JFrame parent, controller.TutorController controller, Tutor tutor) {
         super(parent, "Editar Tutor", true);
         this.controller = controller;
@@ -70,6 +89,9 @@ public class DialogoTutor extends JDialog {
         }
     }
 
+    /**
+     * Crea y ubica los tres paneles principales del diálogo: datos básicos, materias/horarios y botones.
+     */
     private void inicializarComponentes() {
         setSize(600, 550);
         setLocationRelativeTo(null);
@@ -80,6 +102,9 @@ public class DialogoTutor extends JDialog {
         add(crearPanelBotones(), BorderLayout.SOUTH);
     }
 
+    /**
+     * @return el panel con los campos de nombre, apellido, email y teléfono del tutor
+     */
     private JPanel crearPanelDatosBasicos() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Datos del Tutor"));
@@ -96,6 +121,9 @@ public class DialogoTutor extends JDialog {
         return panel;
     }
 
+    /**
+     * @return el panel central que junta el panel de materias y el panel de horarios
+     */
     private JPanel crearPanelCentral() {
         JPanel panel = new JPanel(new GridLayout(1, 2, 8, 0));
         panel.add(crearPanelMaterias());
@@ -103,6 +131,9 @@ public class DialogoTutor extends JDialog {
         return panel;
     }
 
+    /**
+     * @return el panel con la tabla de materias del tutor y los campos para agregar o quitar una materia
+     */
     private JPanel crearPanelMaterias() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Materias"));
@@ -153,6 +184,9 @@ public class DialogoTutor extends JDialog {
         return panel;
     }
 
+    /**
+     * @return el panel con la tabla de bloques de horario del tutor y los campos para agregar o quitar un bloque
+     */
     private JPanel crearPanelHorarios() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Horarios de Disponibilidad"));
@@ -197,6 +231,9 @@ public class DialogoTutor extends JDialog {
         return panel;
     }
 
+    /**
+     * @return el panel con los botones de guardar y cancelar, con la lógica para registrar o modificar el tutor y sus materias y horarios
+     */
     private JPanel crearPanelBotones() {
         JPanel panel = new JPanel();
         btnGuardar = new JButton("Guardar");

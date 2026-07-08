@@ -12,24 +12,34 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Panel con la tabla de reservas y los botones para agendar una nueva reserva o anular
+ * la seleccionada. Se refresca solo cuando el Modelo notifica un cambio relevante sobre
+ * reservas.
+ */
 public class PanelReservas extends JPanel implements modelObserver {
 
     private ReservaController controller;
     private EstudianteController estudianteController;
     private TutorController tutorController;
-    
+
     private JTable tablaReservas;
     private DefaultTableModel modeloTabla;
     private JButton btnNuevaReserva;
     private JButton btnAnularReserva;
 
+    /**
+     * @param controller controlador al que se delegan las operaciones sobre reservas
+     * @param estCtrl controlador de estudiantes, usado por el diálogo de nueva reserva
+     * @param tutCtrl controlador de tutores, usado por el diálogo de nueva reserva
+     */
     public PanelReservas(ReservaController controller,
                          EstudianteController estCtrl,
                          TutorController tutCtrl) {
         this.controller = controller;
         this.estudianteController = estCtrl;
         this.tutorController = tutCtrl;
-        
+
         setLayout(new BorderLayout());
 
         inicializarBotones();
@@ -37,6 +47,9 @@ public class PanelReservas extends JPanel implements modelObserver {
         cargarDatos();
     }
 
+    /**
+     * Crea los botones de nueva reserva y anular reserva, y conecta sus acciones.
+     */
     private void inicializarBotones() {
         JPanel PanelNorte = new JPanel();
 
@@ -69,6 +82,9 @@ public class PanelReservas extends JPanel implements modelObserver {
         add(PanelNorte, BorderLayout.NORTH);
     }
 
+    /**
+     * Crea la tabla de reservas, sin celdas editables directamente.
+     */
     private void inicializarTabla() {
         String[] columnas = {"ID", "Estudiante", "Tutor", "Materia", "Día", "Horario"};
 
@@ -82,6 +98,9 @@ public class PanelReservas extends JPanel implements modelObserver {
         add(new JScrollPane(tablaReservas), BorderLayout.CENTER);
     }
 
+    /**
+     * Vacía y vuelve a llenar la tabla con las reservas activas actuales.
+     */
     private void cargarDatos() {
         modeloTabla.setRowCount(0);
         List<Reserva> lista = controller.obtenerTodas();
@@ -101,6 +120,10 @@ public class PanelReservas extends JPanel implements modelObserver {
         }
     }
 
+    /**
+     * @param evento tipo de evento ocurrido
+     * @param datos objeto afectado por el evento
+     */
     @Override
     public void onModeloActualizado(eventoModelo evento, Object datos) {
         if(evento == eventoModelo.RESERVA_CREADA || evento == eventoModelo.RESERVA_CANCELADA){

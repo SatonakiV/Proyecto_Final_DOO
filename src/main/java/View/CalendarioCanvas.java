@@ -8,6 +8,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dibuja a mano, con Graphics2D, el calendario semanal con un bloque coloreado por cada
+ * reserva activa. Se dedica solo a calcular coordenadas y pintar, sin manejar botones
+ * ni layouts.
+ */
 public class CalendarioCanvas extends JPanel {
 
     private List<Reserva> reservas = new ArrayList<>();
@@ -30,15 +35,24 @@ public class CalendarioCanvas extends JPanel {
             new Color(220, 90, 90)
     };
 
+    /**
+     * Crea el canvas con su color de fondo y tamaño preferido según la cantidad de días a dibujar.
+     */
     public CalendarioCanvas() {
         setBackground(new Color(245, 245, 250));
         setPreferredSize(new Dimension(OFFSET_X + DIAS_ORDEN.length * ANCHO_COLUMNA + 20, 700));
     }
 
+    /**
+     * @param reservas lista de reservas a dibujar en el próximo repintado
+     */
     public void setReservas(List<Reserva> reservas) {
         this.reservas = reservas;
     }
 
+    /**
+     * @param g contexto gráfico sobre el que se dibuja el calendario
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -58,6 +72,9 @@ public class CalendarioCanvas extends JPanel {
         dibujarReservas(g2);
     }
 
+    /**
+     * @param g2 contexto gráfico sobre el que se dibujan los encabezados de día y las líneas verticales
+     */
     private void dibujarEncabezados(Graphics2D g2) {
         g2.setFont(new Font("SansSerif", Font.BOLD, 13));
         for (int i = 0; i < DIAS_ORDEN.length; i++) {
@@ -74,6 +91,9 @@ public class CalendarioCanvas extends JPanel {
         }
     }
 
+    /**
+     * @param g2 contexto gráfico sobre el que se dibujan las líneas horizontales y las etiquetas de hora
+     */
     private void dibujarFilasHoras(Graphics2D g2) {
         g2.setFont(new Font("SansSerif", Font.PLAIN, 11));
         for (int hora = 7; hora <= 20; hora++) {
@@ -85,6 +105,9 @@ public class CalendarioCanvas extends JPanel {
         }
     }
 
+    /**
+     * @param g2 contexto gráfico sobre el que se dibuja un rectángulo coloreado por cada reserva activa
+     */
     private void dibujarReservas(Graphics2D g2) {
         int colorIndex = 0;
 

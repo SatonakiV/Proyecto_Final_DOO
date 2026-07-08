@@ -11,6 +11,12 @@ import java.awt.*;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Diálogo con el flujo de dos pasos para agendar una clase: primero se arma un
+ * criterio de búsqueda y se buscan tutores disponibles, y recién cuando hay resultados
+ * se habilita agendar la clase con el tutor elegido. Separar la búsqueda del
+ * agendamiento evita reservar a ciegas sin saber antes si el tutor tiene cupo.
+ */
 public class DialogoReserva extends JDialog {
 
     private ReservaController reservaController;
@@ -28,7 +34,13 @@ public class DialogoReserva extends JDialog {
     private JComboBox<Tutor> cbTutoresDisponibles;
     private JButton btnAgendar;
 
-    public DialogoReserva(JFrame parent, 
+    /**
+     * @param parent ventana padre del diálogo
+     * @param resCtrl controlador al que se delegan la búsqueda de tutores y el agendamiento de la reserva
+     * @param estCtrl controlador usado para llenar el combo de estudiantes
+     * @param tutCtrl controlador usado para llenar el combo de materias
+     */
+    public DialogoReserva(JFrame parent,
                           ReservaController resCtrl,
                           EstudianteController estCtrl,
                           TutorController tutCtrl) {
@@ -47,6 +59,9 @@ public class DialogoReserva extends JDialog {
         configurarAccionesBotones();
     }
 
+    /**
+     * Crea el formulario con los criterios de búsqueda: estudiante, materia, día, horario y notas.
+     */
     private void inicializarFormulario() {
         JPanel panelForm = new JPanel(new GridLayout(6, 2, 5, 5));
         panelForm.setBorder(BorderFactory.createTitledBorder("Criterios de Búsqueda"));
@@ -70,6 +85,10 @@ public class DialogoReserva extends JDialog {
         add(panelForm, BorderLayout.NORTH);
     }
 
+    /**
+     * Crea el panel con el botón de buscar tutores, el combo de resultados y el botón de agendar,
+     * ambos deshabilitados hasta que haya una búsqueda con resultados.
+     */
     private void inicializarPanelResultados() {
         JPanel panelResultados = new JPanel(new GridLayout(3, 1, 5, 5));
         panelResultados.setBorder(BorderFactory.createTitledBorder("Resultados y Agendamiento"));
@@ -88,6 +107,9 @@ public class DialogoReserva extends JDialog {
         add(panelResultados, BorderLayout.CENTER);
     }
 
+    /**
+     * Llena los combos de estudiante y materia con los datos actuales del Modelo.
+     */
     private void cargarDatosBase() {
         List<Estudiante> estudiantes = estudianteController.obtenerTodos();
         for (Estudiante e : estudiantes) {
@@ -100,6 +122,10 @@ public class DialogoReserva extends JDialog {
         }
     }
 
+    /**
+     * Conecta la acción de buscar tutores disponibles y la acción de agendar la clase
+     * con el tutor seleccionado.
+     */
     private void configurarAccionesBotones() {
         btnBuscarTutores.addActionListener(e -> {
             String materia = (String) cbMateria.getSelectedItem();

@@ -1,5 +1,9 @@
 package Model.enums;
 
+/**
+ * Representa los tipos de aviso que un servicio del Modelo puede notificar a sus
+ * observadores cuando cambian los datos de tutores, estudiantes o reservas.
+ */
 public enum eventoModelo {
 
     TUTOR_AGREGADO,

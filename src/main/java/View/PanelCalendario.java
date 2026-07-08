@@ -10,6 +10,11 @@ import java.awt.*;
 import java.util.List;
 import java.util.List;
 
+/**
+ * Contenedor del calendario semanal, con los controles de filtro y actualización.
+ * Delega el dibujado propiamente dicho en CalendarioCanvas. Se refresca solo cuando
+ * el Modelo notifica un cambio relevante sobre reservas.
+ */
 public class PanelCalendario extends JPanel implements modelObserver {
 
     private controller.CalendarioController controller;
@@ -17,6 +22,9 @@ public class PanelCalendario extends JPanel implements modelObserver {
     private JComboBox<String> cbFiltro;
     private JButton btnActualizar;
 
+    /**
+     * @param controller controlador al que se delegan las operaciones sobre el calendario
+     */
     public PanelCalendario(controller.CalendarioController controller) {
         this.controller = controller;
         setLayout(new BorderLayout(5, 5));
@@ -25,6 +33,9 @@ public class PanelCalendario extends JPanel implements modelObserver {
         cargarDatos();
     }
 
+    /**
+     * Crea el combo de filtro y el botón de actualizar calendario.
+     */
     private void inicializarFiltros() {
         JPanel panelNorte = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelNorte.setBorder(BorderFactory.createTitledBorder("Vista del Calendario"));
@@ -41,6 +52,9 @@ public class PanelCalendario extends JPanel implements modelObserver {
         add(panelNorte, BorderLayout.NORTH);
     }
 
+    /**
+     * Crea el canvas del calendario dentro de un panel con scroll.
+     */
     private void inicializarCanvas() {
         canvas = new CalendarioCanvas();
         JScrollPane scroll = new JScrollPane(canvas);
@@ -49,12 +63,19 @@ public class PanelCalendario extends JPanel implements modelObserver {
         add(scroll, BorderLayout.CENTER);
     }
 
+    /**
+     * Obtiene todas las reservas activas y le pide al canvas que las vuelva a dibujar.
+     */
     private void cargarDatos() {
         List<Reserva> todasLasReservas = controller.obtenerTodasLasReservas();
         canvas.setReservas(todasLasReservas);
         canvas.repaint();
     }
 
+    /**
+     * @param evento tipo de evento ocurrido
+     * @param datos objeto afectado por el evento
+     */
     @Override
     public void onModeloActualizado(eventoModelo evento, Object datos) {
         if (evento == eventoModelo.RESERVA_CREADA || evento == eventoModelo.RESERVA_CANCELADA) {

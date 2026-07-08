@@ -27,6 +27,7 @@ public class PanelReservas extends JPanel implements modelObserver {
     private DefaultTableModel modeloTabla;
     private JButton btnNuevaReserva;
     private JButton btnAnularReserva;
+    private JButton btnModificarReserva;
 
     /**
      * @param controller controlador al que se delegan las operaciones sobre reservas
@@ -54,14 +55,42 @@ public class PanelReservas extends JPanel implements modelObserver {
         JPanel PanelNorte = new JPanel();
 
         btnNuevaReserva = new JButton("Nueva Reserva (Buscar Tutor)");
+        btnModificarReserva = new JButton("Modificar Reserva Seleccionada");
         btnAnularReserva = new JButton("Anular Reserva Seleccionada");
         botonesUI.pintarBoton(btnNuevaReserva);
+        botonesUI.pintarBoton(btnModificarReserva);
         botonesUI.pintarBoton(btnAnularReserva);
+
+        btnModificarReserva.addActionListener(e -> {
+            int fila = tablaReservas.getSelectedRow();
+            if(fila == -1){
+                JOptionPane.showMessageDialog(this, "Por favor seleccione una reserva primero");
+                return;
+            }
+
+            String estado = (String) modeloTabla.getValueAt(fila, 6);
+            if (!"Activa".equalsIgnoreCase(estado)) {
+                JOptionPane.showMessageDialog(this, "Solo se pueden modificar reservas activas.");
+                return;
+            }
+
+            String idReserva = (String) modeloTabla.getValueAt(fila, 0);
+            Reserva reserva = controller.buscarPorId(idReserva);
+
+            DialogoModificarReserva dialogo = new DialogoModificarReserva(null, this.controller, reserva);
+            dialogo.setVisible(true);
+        });
 
         btnAnularReserva.addActionListener(e -> {
             int fila = tablaReservas.getSelectedRow();
             if(fila == -1){
                 JOptionPane.showMessageDialog(this, "Por favor seleccione una reserva primero");
+                return;
+            }
+
+            String estado = (String) modeloTabla.getValueAt(fila, 6);
+            if (!"Activa".equalsIgnoreCase(estado)) {
+                JOptionPane.showMessageDialog(this, "Solo se pueden anular reservas activas.");
                 return;
             }
 
@@ -80,6 +109,7 @@ public class PanelReservas extends JPanel implements modelObserver {
         });
 
         PanelNorte.add(btnNuevaReserva);
+        PanelNorte.add(btnModificarReserva);
         PanelNorte.add(btnAnularReserva);
         add(PanelNorte, BorderLayout.NORTH);
     }
@@ -88,7 +118,7 @@ public class PanelReservas extends JPanel implements modelObserver {
      * Crea la tabla de reservas, sin celdas editables directamente.
      */
     private void inicializarTabla() {
-        String[] columnas = {"ID", "Estudiante", "Tutor", "Materia", "Día", "Horario", "Tarifa/hr", "Costo Total"};
+        String[] columnas = {"ID", "Estudiante", "Tutor", "Materia", "Día", "Horario", "Estado", "Tarifa/hr", "Costo Total"};
 
         modeloTabla = new DefaultTableModel(columnas, 0){
             @Override
@@ -97,35 +127,36 @@ public class PanelReservas extends JPanel implements modelObserver {
             }
         };
         tablaReservas = new JTable(modeloTabla);
-        tablaReservas.setDefaultRenderer(Object.class, new ReservaCellRenderer()); // <-- enganche
+        tablaReservas.setDefaultRenderer(Object.class, new ReservaCellRenderer());
         add(new JScrollPane(tablaReservas), BorderLayout.CENTER);
     }
 
     /**
-     * Vacía y vuelve a llenar la tabla con las reservas activas actuales.
+     * Vacía y vuelve a llenar la tabla con todas las reservas (activas, canceladas y
+     * completadas), para que el color de fila del {@link ReservaCellRenderer} tenga
+     * sentido según el estado de cada una.
      */
     private void cargarDatos() {
         modeloTabla.setRowCount(0);
         List<Reserva> lista = controller.obtenerTodas();
 
         for(Reserva r : lista){
-            if (r.estaActiva()) {
-                double tarifaPorHora = r.getMateria().getTarifaPorHora();
-                double horas = r.getBloqueHorario().getDuracionMinutos() / 60.0;
-                double costoTotal = tarifaPorHora * horas;
+            double tarifaPorHora = r.getMateria().getTarifaPorHora();
+            double horas = r.getBloqueHorario().getDuracionMinutos() / 60.0;
+            double costoTotal = tarifaPorHora * horas;
 
-                Object[] fila = {
-                    r.getId(),
-                    r.getEstudiante().getNombreCompleto(),
-                    r.getTutor().getNombreCompleto(),
-                    r.getMateria().getNombre(),
-                    r.getBloqueHorario().getDia().toString(),
-                    r.getBloqueHorario().getHoraInicio() + " a " + r.getBloqueHorario().getHoraFin(),
-                    String.format("$%.2f", tarifaPorHora),
-                    String.format("$%.2f", costoTotal)
-                };
-                modeloTabla.addRow(fila);
-            }
+            Object[] fila = {
+                r.getId(),
+                r.getEstudiante().getNombreCompleto(),
+                r.getTutor().getNombreCompleto(),
+                r.getMateria().getNombre(),
+                r.getBloqueHorario().getDia().toString(),
+                r.getBloqueHorario().getHoraInicio() + " a " + r.getBloqueHorario().getHoraFin(),
+                r.getEstado().getDescripcion(),
+                String.format("$%.2f", tarifaPorHora),
+                String.format("$%.2f", costoTotal)
+            };
+            modeloTabla.addRow(fila);
         }
     }
 
@@ -135,7 +166,8 @@ public class PanelReservas extends JPanel implements modelObserver {
      */
     @Override
     public void onModeloActualizado(eventoModelo evento, Object datos) {
-        if(evento == eventoModelo.RESERVA_CREADA || evento == eventoModelo.RESERVA_CANCELADA){
+        if(evento == eventoModelo.RESERVA_CREADA || evento == eventoModelo.RESERVA_CANCELADA
+                || evento == eventoModelo.RESERVA_MODIFICADO){
             cargarDatos();
         }
     }

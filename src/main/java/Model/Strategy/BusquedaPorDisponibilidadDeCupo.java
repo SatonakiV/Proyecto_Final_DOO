@@ -45,7 +45,7 @@ public class BusquedaPorDisponibilidadDeCupo implements strategyBusqueda {
                             tutor.getId(), criterios.getMateria(), bloque);
 
                     int cupoMaximo = tutor.getMaterias().stream()
-                            .filter(m -> m.getNombre().equals(criterios.getMateria()))
+                            .filter(m -> m.getNombre().equalsIgnoreCase(criterios.getMateria()))
                             .findFirst()
                             .map(Materia::getCupoMaximoEstudiantes)
                             .orElse(0);

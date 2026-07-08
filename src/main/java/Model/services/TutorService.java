@@ -177,7 +177,11 @@ public class TutorService implements observer {
     @Override
     public void notifyObservador(eventoModelo evento, Object datos) {
         for (modelObserver obs : observadores) {
-            obs.onModeloActualizado(evento, datos);
+            try {
+                obs.onModeloActualizado(evento, datos);
+            } catch (Exception e) {
+                System.out.println("Error al notificar observadores de TutorService: " + e.getMessage());
+            }
         }
     }
 }

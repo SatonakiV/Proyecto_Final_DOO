@@ -97,6 +97,7 @@ public class PanelReservas extends JPanel implements modelObserver {
             }
         };
         tablaReservas = new JTable(modeloTabla);
+        tablaReservas.setDefaultRenderer(Object.class, new ReservaCellRenderer()); // <-- enganche
         add(new JScrollPane(tablaReservas), BorderLayout.CENTER);
     }
 

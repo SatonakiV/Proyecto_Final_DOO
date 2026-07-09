@@ -36,6 +36,17 @@ public class PanelTutores extends JPanel implements modelObserver {
     }
 
     /**
+     * @return la ventana principal que contiene a este panel, o null si aún no está en pantalla
+     */
+    private JFrame obtenerVentanaPadre() {
+        Window ventana = SwingUtilities.getWindowAncestor(this);
+        if (ventana instanceof JFrame) {
+            return (JFrame) ventana;
+        }
+        return null;
+    }
+
+    /**
      * Crea los botones de agregar, editar y eliminar tutor, y conecta sus acciones.
      */
     private void inicializarBotones() {
@@ -49,7 +60,7 @@ public class PanelTutores extends JPanel implements modelObserver {
         botonesUI.pintarBoton(btnEliminar);
 
         btnAgregar.addActionListener(e -> {
-            DialogoTutor dialogo = new DialogoTutor(null, this.controller);
+            DialogoTutor dialogo = new DialogoTutor(obtenerVentanaPadre(), this.controller);
             dialogo.setVisible(true);
         });
 
@@ -62,7 +73,7 @@ public class PanelTutores extends JPanel implements modelObserver {
             String id = (String) modeloTabla.getValueAt(fila, 0);
             Tutor tutor = controller.buscarPorId(id);
             if (tutor != null) {
-                DialogoTutor dialogo = new DialogoTutor(null, this.controller, tutor);
+                DialogoTutor dialogo = new DialogoTutor(obtenerVentanaPadre(), this.controller, tutor);
                 dialogo.setVisible(true);
             }
         });

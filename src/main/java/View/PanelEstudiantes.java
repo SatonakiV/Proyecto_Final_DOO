@@ -40,6 +40,17 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
     }
 
     /**
+     * @return la ventana principal que contiene a este panel, o null si aún no está en pantalla
+     */
+    private JFrame obtenerVentanaPadre() {
+        Window ventana = SwingUtilities.getWindowAncestor(this);
+        if (ventana instanceof JFrame) {
+            return (JFrame) ventana;
+        }
+        return null;
+    }
+
+    /**
      * Crea los botones de agregar, editar y eliminar estudiante, y conecta sus acciones.
      */
     private void inicializarBotones() {
@@ -55,7 +66,7 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
 
         btnAgregar.addActionListener(e -> {
 
-            DialogoEstudiante dialogo = new DialogoEstudiante(null, controller);
+            DialogoEstudiante dialogo = new DialogoEstudiante(obtenerVentanaPadre(), controller);
             dialogo.setVisible(true);
 
         });
@@ -71,7 +82,7 @@ public class PanelEstudiantes extends JPanel implements modelObserver {
 
             Estudiante est = controller.buscarPorId(id);
 
-            DialogoEstudiante dialogo = new DialogoEstudiante(null, controller, est);
+            DialogoEstudiante dialogo = new DialogoEstudiante(obtenerVentanaPadre(), controller, est);
             dialogo.setVisible(true);
 
 

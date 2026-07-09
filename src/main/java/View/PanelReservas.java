@@ -49,6 +49,17 @@ public class PanelReservas extends JPanel implements modelObserver {
     }
 
     /**
+     * @return la ventana principal que contiene a este panel, o null si aún no está en pantalla
+     */
+    private JFrame obtenerVentanaPadre() {
+        Window ventana = SwingUtilities.getWindowAncestor(this);
+        if (ventana instanceof JFrame) {
+            return (JFrame) ventana;
+        }
+        return null;
+    }
+
+    /**
      * Crea los botones de nueva reserva y anular reserva, y conecta sus acciones.
      */
     private void inicializarBotones() {
@@ -77,7 +88,7 @@ public class PanelReservas extends JPanel implements modelObserver {
             String idReserva = (String) modeloTabla.getValueAt(fila, 0);
             Reserva reserva = controller.buscarPorId(idReserva);
 
-            DialogoModificarReserva dialogo = new DialogoModificarReserva(null, this.controller, reserva);
+            DialogoModificarReserva dialogo = new DialogoModificarReserva(obtenerVentanaPadre(), this.controller, reserva);
             dialogo.setVisible(true);
         });
 
@@ -104,7 +115,7 @@ public class PanelReservas extends JPanel implements modelObserver {
         });
 
         btnNuevaReserva.addActionListener(e -> {
-            DialogoReserva dialogo = new DialogoReserva(null, this.controller, this.estudianteController, this.tutorController);
+            DialogoReserva dialogo = new DialogoReserva(obtenerVentanaPadre(), this.controller, this.estudianteController, this.tutorController);
             dialogo.setVisible(true);
         });
 
@@ -146,15 +157,15 @@ public class PanelReservas extends JPanel implements modelObserver {
             double costoTotal = tarifaPorHora * horas;
 
             Object[] fila = {
-                r.getId(),
-                r.getEstudiante().getNombreCompleto(),
-                r.getTutor().getNombreCompleto(),
-                r.getMateria().getNombre(),
-                r.getBloqueHorario().getDia().toString(),
-                r.getBloqueHorario().getHoraInicio() + " a " + r.getBloqueHorario().getHoraFin(),
-                r.getEstado().getDescripcion(),
-                String.format("$%.2f", tarifaPorHora),
-                String.format("$%.2f", costoTotal)
+                    r.getId(),
+                    r.getEstudiante().getNombreCompleto(),
+                    r.getTutor().getNombreCompleto(),
+                    r.getMateria().getNombre(),
+                    r.getBloqueHorario().getDia().toString(),
+                    r.getBloqueHorario().getHoraInicio() + " a " + r.getBloqueHorario().getHoraFin(),
+                    r.getEstado().getDescripcion(),
+                    String.format("$%.2f", tarifaPorHora),
+                    String.format("$%.2f", costoTotal)
             };
             modeloTabla.addRow(fila);
         }

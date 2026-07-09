@@ -95,7 +95,7 @@ public class DialogoTutor extends JDialog {
      */
     private void inicializarComponentes() {
         setSize(600, 550);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(getOwner());
         setLayout(new BorderLayout(8, 8));
 
         add(crearPanelDatosBasicos(), BorderLayout.NORTH);
@@ -262,27 +262,33 @@ public class DialogoTutor extends JDialog {
             if (modoEdicion) {
                 controller.modificarTutor(idAEditar, nombre, apellido, email, telefono);
             } else {
+                int tutoresAntes = controller.obtenerTodos().size();
                 controller.agregarTutor(nombre, apellido, email, telefono);
                 List<Tutor> tutores = controller.obtenerTodos();
-                if (!tutores.isEmpty()) {
-                    String nuevoId = tutores.get(tutores.size() - 1).getId();
-                    for (int i = 0; i < modeloMaterias.getRowCount(); i++) {
-                        String nomMat = (String) modeloMaterias.getValueAt(i, 0);
-                        double tarifa = (double) modeloMaterias.getValueAt(i, 1);
-                        int cupo = (int) modeloMaterias.getValueAt(i, 2);
-                        controller.agregarMateriaATutor(nuevoId, nomMat, tarifa, cupo);
-                    }
-                    for (int i = 0; i < modeloHorarios.getRowCount(); i++) {
-                        String diaStr = (String) modeloHorarios.getValueAt(i, 0);
-                        String inicioStr = (String) modeloHorarios.getValueAt(i, 1);
-                        String finStr = (String) modeloHorarios.getValueAt(i, 2);
-                        controller.agregarBloqueATutor(
-                                nuevoId,
-                                diaSemana.valueOf(diaStr),
-                                LocalTime.parse(inicioStr),
-                                LocalTime.parse(finStr)
-                        );
-                    }
+
+                // Si la cantidad no aumentó, la creación falló (el controller ya mostró el
+                // error). No agregamos materias/horarios a otro tutor ni cerramos el diálogo.
+                if (tutores.size() <= tutoresAntes) {
+                    return;
+                }
+
+                String nuevoId = tutores.get(tutores.size() - 1).getId();
+                for (int i = 0; i < modeloMaterias.getRowCount(); i++) {
+                    String nomMat = (String) modeloMaterias.getValueAt(i, 0);
+                    double tarifa = (double) modeloMaterias.getValueAt(i, 1);
+                    int cupo = (int) modeloMaterias.getValueAt(i, 2);
+                    controller.agregarMateriaATutor(nuevoId, nomMat, tarifa, cupo);
+                }
+                for (int i = 0; i < modeloHorarios.getRowCount(); i++) {
+                    String diaStr = (String) modeloHorarios.getValueAt(i, 0);
+                    String inicioStr = (String) modeloHorarios.getValueAt(i, 1);
+                    String finStr = (String) modeloHorarios.getValueAt(i, 2);
+                    controller.agregarBloqueATutor(
+                            nuevoId,
+                            diaSemana.valueOf(diaStr),
+                            LocalTime.parse(inicioStr),
+                            LocalTime.parse(finStr)
+                    );
                 }
             }
             dispose();

@@ -56,7 +56,6 @@ public class DialogoEstudiante extends JDialog {
         txtApellido.setText(estudianteAEditar.getApellido());
         txtEmail.setText(estudianteAEditar.getEmail());
         txtTelefono.setText(estudianteAEditar.getTelefono());
-
     }
 
 
@@ -67,7 +66,7 @@ public class DialogoEstudiante extends JDialog {
     private void inicializarComponentes() {
 
         setSize(300, 250);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(getOwner());
         setLayout(new GridLayout(5,2,10,10));
 
         txtNombre = new JTextField(); txtApellido = new JTextField();

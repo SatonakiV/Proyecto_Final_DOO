@@ -1,13 +1,11 @@
 package View;
 
 import Model.entidades.Reserva;
-import Model.enums.diaSemana;
 import Model.enums.eventoModelo;
 import Model.observer.modelObserver;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.List;
 
 /**
@@ -79,7 +77,8 @@ public class PanelCalendario extends JPanel implements modelObserver {
      */
     @Override
     public void onModeloActualizado(eventoModelo evento, Object datos) {
-        if (evento == eventoModelo.RESERVA_CREADA || evento == eventoModelo.RESERVA_CANCELADA) {
+        if (evento == eventoModelo.RESERVA_CREADA || evento == eventoModelo.RESERVA_CANCELADA
+                || evento == eventoModelo.RESERVA_MODIFICADO) {
             cargarDatos();
         }
     }

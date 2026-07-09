@@ -22,6 +22,9 @@ public class CalendarioCanvas extends JPanel {
     private static final int OFFSET_X = 60;
     private static final int OFFSET_Y = 40;
 
+    // La grilla va de 07:00 a 20:00, es decir 13 filas de una hora cada una.
+    private static final int FILAS_HORAS = 13;
+
     private static final diaSemana[] DIAS_ORDEN = {
             diaSemana.LUNES, diaSemana.MARTES, diaSemana.MIERCOLES,
             diaSemana.JUEVES, diaSemana.VIERNES, diaSemana.SABADO
@@ -87,7 +90,7 @@ public class CalendarioCanvas extends JPanel {
         for (int i = 0; i <= DIAS_ORDEN.length; i++) {
             int x = OFFSET_X + i * ANCHO_COLUMNA;
             g2.setColor(new Color(200, 200, 210));
-            g2.drawLine(x, OFFSET_Y, x, OFFSET_Y + 14 * ALTO_FILA);
+            g2.drawLine(x, OFFSET_Y, x, OFFSET_Y + FILAS_HORAS * ALTO_FILA);
         }
     }
 

@@ -74,6 +74,40 @@ public class ReservaController {
     }
 
     /**
+     * Cambia el bloque de horario de una reserva existente, revalidando disponibilidad
+     * del tutor, choques de horario del estudiante y cupo máximo, igual que al crearla.
+     *
+     * @param idReserva id de la reserva a modificar
+     * @param nuevoBloque nuevo bloque de horario de la reserva
+     * @return un mensaje de éxito, o un mensaje distinto según el tipo de error de negocio ocurrido
+     */
+    public String modificarReserva(String idReserva, BloqueHorario nuevoBloque) {
+        try {
+            srvReserva.modificarReserva(idReserva, nuevoBloque);
+            return "Reserva modificada con éxito.";
+        } catch (cupoMaximoException e) {
+            return "Sin cupos disponibles en ese horario.";
+        } catch (conflictoHorarioException e) {
+            return "Error, horario ya tomado.";
+        } catch (tutorNoDisponibleException e) {
+            return "Profesor no disponible en ese horario.";
+        } catch (datosInvalidosException e) {
+            return "Datos inválidos.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error general";
+        }
+    }
+
+    /**
+     * @param idReserva id de la reserva a buscar
+     * @return la reserva con ese id
+     */
+    public Reserva buscarPorId(String idReserva) {
+        return srvReserva.buscarPorId(idReserva);
+    }
+
+    /**
      * @return la lista de todas las reservas, activas o no
      */
     public List<Reserva> obtenerTodas() {
